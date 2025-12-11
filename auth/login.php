@@ -1,9 +1,10 @@
 <?php
-// Halaman login di folder auth
-require_once __DIR__ . '/../config/db.php';
-// Jika sudah login, arahkan ke dashboard
+// Jangan include db.php di halaman login
+session_start();
+
+// Jika sudah login → Arahkan ke dashboard
 if (!empty($_SESSION['admin_id'])) {
-    header('Location: /contract/index.php');
+    header('Location: ../index.php'); 
     exit();
 }
 ?>
