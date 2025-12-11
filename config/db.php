@@ -2,6 +2,8 @@
 // Mulai session dan cek autentikasi (kecuali halaman login/processing/logout)
 session_start();
 
+$dot = parse_ini_file(__DIR__.'/../.env');
+
 $allowed = [
   // gunakan nama berkas saja karena kita membandingkan dengan basename($_SERVER['PHP_SELF'])
   'login.php',
@@ -18,12 +20,13 @@ if (!in_array($currentScript, $allowed)) {
   }
 }
 
-$host = "db"; // ini nama service di docker-compose.yml
-$user = "root";
-$pass = "password";
-$db   = "ruser420_contract"; // ganti sesuai nama database kamu
-
-$conn = new mysqli($host, $user, $pass, $db);
+$conn = new mysqli(
+  $dot['DB_HOST'],
+  $dot['DB_USERNAME'],
+  $dot['DB_PASSWORD'],
+  $dot['DB_DATABASE'],
+  $dot['DB_PORT']
+);
 
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
