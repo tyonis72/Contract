@@ -13,6 +13,7 @@
             <li class="nav-item"><a href="<?php echo $base_url; ?>region/region-list.php" class="nav-link text-dark">Region List</a></li>
             <li class="nav-item"><a href="<?php echo $base_url; ?>pkwt/pkwt-list.php" class="nav-link text-dark">Pkwt List</a></li>
             <li class="nav-item"><a href="<?php echo $base_url; ?>company/company-list.php" class="nav-link text-dark">Company List</a></li>
+            <li class="nav-item"><a href="<?php echo $base_url; ?>subcompany/subcompany-list.php" class="nav-link text-dark">Subcompany List</a></li>
             <li class="nav-item"><a href="<?php echo $base_url; ?>contract/contract-list.php" class="nav-link text-dark">Contract List</a></li>
             <li class="nav-item"><a href="<?php echo $base_url; ?>admin/index.php" class="nav-link text-dark">Admin</a></li>
         </ul>
