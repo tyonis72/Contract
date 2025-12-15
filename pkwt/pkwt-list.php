@@ -2,7 +2,7 @@
 include('../config/db.php');
 
 /* ===== PAGINATION ===== */
-$perPage = 100;
+$perPage = 10;
 $page    = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset  = ($page - 1) * $perPage;
 
@@ -16,8 +16,8 @@ if ($search !== '') {
 }
 
 /* ===== COUNT ===== */
-$countSql = "SELECT COUNT(*) as total FROM T_Pkwt $where";
-$totalRows = $conn->query($countSql)->fetch_assoc()['total'];
+$countSql = $conn->query("SELECT COUNT(*) as total FROM T_Pkwt $where");
+$totalRows = $countSql->fetch_assoc()['total'];
 $totalPages = max(1, ceil($totalRows / $perPage));
 
 /* ===== DATA PKWT ===== */
@@ -153,6 +153,41 @@ $conn->query("
                 </tbody>
               </table>
             </div>
+
+            <!-- Pagination -->
+                <?php if ($totalPages > 1): ?>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <?php if ($page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="pkwt-list.php?page=1<?php if (!empty($search)) echo '&search=' . urlencode($search); ?>">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="pkwt-list.php?page=<?php echo $page - 1; ?><?php if (!empty($search)) echo '&search=' . urlencode($search); ?>">Previous</a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php
+                            $start = max(1, $page - 1);
+                            $end = min($totalPages, $page + 2);
+                            for ($i = $start; $i <= $end; $i++):
+                            ?>
+                                <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="pkwt-list.php?page=<?php echo $i; ?><?php if (!empty($search)) echo '&search=' . urlencode($search); ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($page < $totalPages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="pkwt-list.php?page=<?php echo $page + 1; ?><?php if (!empty($search)) echo '&search=' . urlencode($search); ?>">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="pkwt-list.php?page=<?php echo $totalPages; ?><?php if (!empty($search)) echo '&search=' . urlencode($search); ?>">Last</a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                <?php endif; ?>
 
           </div>
         </div>

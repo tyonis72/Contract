@@ -2,7 +2,7 @@
 include('../config/db.php');
 
 /* ===== PAGINATION SETTING ===== */
-$perPage = 100;
+$perPage = 10;
 $page    = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset  = ($page - 1) * $perPage;
 
@@ -16,9 +16,9 @@ if ($search !== '') {
 }
 
 /* ===== HITUNG TOTAL DATA ===== */
-$countSql = "SELECT COUNT(*) AS total FROM T_Subcompany $where";
-$totalRows = $conn->query($countSql)->fetch_assoc()['total'];
-$totalPages = max(1, ceil($totalRows / $perPage));
+$countSql = $conn->query("SELECT COUNT(*) AS total FROM T_Subcompany $where");
+$totalRows = $countSql->fetch_assoc()['total'];
+$totalPages = ceil($totalRows / $perPage);
 
 /* ===== AMBIL DATA SUBCOMPANY ===== */
 $sql = "
@@ -114,25 +114,42 @@ $result = $conn->query($sql);
                 </tbody>
               </table>
             </div>
-
-            <!-- Pagination -->
-            <nav class="mt-3">
-              <ul class="pagination pagination-sm justify-content-end mb-0">
-                <?php
-                $qsBase = $_GET;
-                for ($p = 1; $p <= $totalPages; $p++) {
-                  $qsBase['page'] = $p;
-                  $link = '?' . http_build_query($qsBase);
-                  $active = ($p == $page) ? 'active' : '';
-                  echo "<li class='page-item $active'>
-                        <a class='page-link' href='$link'>$p</a>
-                      </li>";
-                }
-                ?>
-              </ul>
-            </nav>
-
           </div>
+
+          <!-- Pagination -->
+                <?php if ($totalPages > 1): ?>
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <?php if ($page > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="subcompany-list.php?page=1<?php if (!empty($search)) echo '&search=' . urlencode($search); ?>">First</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="subcompany-list.php?page=<?php echo $page - 1; ?><?php if (!empty($search)) echo '&search=' . urlencode($search); ?>">Previous</a>
+                                </li>
+                            <?php endif; ?>
+
+                            <?php
+                            $start = max(1, $page - 1);
+                            $end = min($totalPages, $page + 2);
+                            for ($i = $start; $i <= $end; $i++):
+                            ?>
+                                <li class="page-item <?php echo $i === $page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="subcompany-list.php?page=<?php echo $i; ?><?php if (!empty($search)) echo '&search=' . urlencode($search); ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <?php if ($page < $totalPages): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="subcompany-list.php?page=<?php echo $page + 1; ?><?php if (!empty($search)) echo '&search=' . urlencode($search); ?>">Next</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="subcompany-list.php?page=<?php echo $totalPages; ?><?php if (!empty($search)) echo '&search=' . urlencode($search); ?>">Last</a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                <?php endif; ?>
         </div>
       </div>
     </div>
