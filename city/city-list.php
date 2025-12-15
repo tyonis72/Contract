@@ -110,8 +110,8 @@ $result = $conn->query($sql);
                   ?>
                       <tr>
                         <td class="text-center"><?= $no++; ?></td>
-                        <td><?= htmlspecialchars($row['city_title']); ?></td>
-                        <td><?= htmlspecialchars($row['region_title']); ?></td>
+                        <td><?= htmlspecialchars($row['city_title'] ?? ''); ?></td>
+                        <td><?= htmlspecialchars($row['region_title'] ?? ''); ?></td>
                         <td class="text-center">
                           <a href="city-edit.php?id=<?= $row['city_id']; ?>" class="btn btn-sm btn-warning">
                             <i class="fa fa-pen"></i>
