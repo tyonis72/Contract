@@ -55,12 +55,6 @@ $close = $conn->query("SELECT COUNT(*) AS closep FROM T_Wltk WHERE wltk_status='
           <div class="fs-4 fw-bold bg-white text-primary px-3 py-1 rounded"><?= $total ?></div>
         </div>
 
-        <div class="d-flex justify-content-end mt-3 mb-3">
-          <a href="contract/add-contract.php" class="btn btn-primary">
-            <i class="fa fa-plus me-1"></i> Add Contract
-          </a>
-        </div>
-
 
         <!-- Cards -->
         <div class="row g-3 mt-3 mb-4">
@@ -69,7 +63,8 @@ $close = $conn->query("SELECT COUNT(*) AS closep FROM T_Wltk WHERE wltk_status='
               <div class="card-body text-center">
                 <h5 class="fw-bold mb-1"><?= $open ?></h5>
                 <p class="text-muted mb-3">ACTIVE</p>
-                <i class="fa fa-hourglass-half fa-2x mb-3 text-secondary"></i>
+                <!-- <i class="fa fa-hourglass-half fa-2x mb-3 text-secondary"></i> -->
+                <!-- <i class="fa fa-check fa-2x mb-3 text-secondary"></i> -->
                 <a href="contract/contract-list.php?filter=active" class="btn btn-sm btn-primary">
                   More Info <i class="fa fa-arrow-right ms-1"></i>
                 </a>
@@ -82,13 +77,20 @@ $close = $conn->query("SELECT COUNT(*) AS closep FROM T_Wltk WHERE wltk_status='
               <div class="card-body text-center">
                 <h5 class="fw-bold mb-1"><?= $close ?></h5>
                 <p class="text-muted mb-3">CLOSED</p>
-                <i class="fa fa-check-circle fa-2x mb-3 text-secondary"></i>
+                <!-- <i class="fa fa-times fa-2x mb-3 text-secondary"></i> -->
                 <a href="contract/contract-list.php?filter=close" class="btn btn-sm btn-primary">
                   More Info <i class="fa fa-arrow-right ms-1"></i>
                 </a>
               </div>
             </div>
           </div>
+        </div>
+
+        
+        <div class="d-flex justify-content-end mt-3 mb-3">
+          <a href="contract/add-contract.php" class="btn btn-primary">
+            <i class="fa fa-plus me-1"></i> Add Contract
+          </a>
         </div>
 
         <!-- Table -->
