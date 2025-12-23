@@ -1,10 +1,24 @@
 <?php
 include('../config/db.php');
 
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+/* ==============================
+   VALIDASI ID
+   ============================== */
+if (!isset($_GET['id']) || $_GET['id'] === '') {
+    header('Location: index.php');
+    exit();
+}
 
-// Fetch admin data
-$result = $conn->query("SELECT * FROM T_Admin WHERE admin_id = $id");
+$id = $_GET['id']; // STRING
+
+/* ==============================
+   AMBIL DATA ADMIN
+   ============================== */
+$stmt = $conn->prepare("SELECT * FROM T_Admin WHERE admin_id = ?");
+$stmt->bind_param("s", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+
 if ($result->num_rows === 0) {
     header('Location: index.php');
     exit();
@@ -12,49 +26,69 @@ if ($result->num_rows === 0) {
 
 $admin = $result->fetch_assoc();
 
-// Fetch roles from T_Role table
+/* ==============================
+   FETCH ROLES
+   ============================== */
 $roles_result = $conn->query("SELECT role_id, role_title FROM T_Role ORDER BY role_title");
 $roles = [];
-while ($role = $roles_result->fetch_assoc()) {
-    $roles[] = $role;
+while ($row = $roles_result->fetch_assoc()) {
+    $roles[] = $row;
 }
 
-// Process form submission
+/* ==============================
+   SUBMIT FORM
+   ============================== */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['admin_email'] ?? '');
-    $password = $_POST['admin_password'] ?? '';
-    $name = trim($_POST['admin_name'] ?? '');
-    $role = trim($_POST['admin_role'] ?? '');
-    $active = $_POST['admin_active'] ?? 'active';
 
-    // Validation
-    if (empty($email) || empty($name)) {
+    $email  = trim($_POST['admin_email'] ?? '');
+    $name   = trim($_POST['admin_name'] ?? '');
+    $role   = trim($_POST['admin_role'] ?? '');
+    $active = $_POST['admin_active'] ?? 'active';
+    $password = $_POST['admin_password'] ?? '';
+
+    if ($email === '' || $name === '') {
         $error = 'Email dan nama tidak boleh kosong.';
     } else {
-        // Check if email already exists (exclude current admin)
-        $check = $conn->query("SELECT admin_id FROM T_Admin WHERE admin_email = '{$conn->real_escape_string($email)}' AND admin_id != $id");
+
+        /* CEK EMAIL DUPLIKAT */
+        $check = $conn->prepare("
+            SELECT admin_id 
+            FROM T_Admin 
+            WHERE admin_email = ? AND admin_id != ?
+        ");
+        $check->bind_param("ss", $email, $id);
+        $check->execute();
+        $check->store_result();
+
         if ($check->num_rows > 0) {
             $error = 'Email sudah digunakan oleh admin lain.';
         } else {
-            // Build update query
-            if (!empty($password)) {
-                // Hash password
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-                $stmt = $conn->prepare("UPDATE T_Admin SET admin_email = ?, admin_password = ?, admin_name = ?, admin_role = ?, admin_active = ?, admin_modify_date = NOW() 
-                               WHERE admin_id = ?");
-                if ($stmt) {
-                    $stmt->bind_param('sssssi', $email, $hashed_password, $name, $role, $active, $id);
-                }
+
+            /* UPDATE DATA */
+            if ($password !== '') {
+
+                $hashed = password_hash($password, PASSWORD_DEFAULT);
+
+                $stmt = $conn->prepare("
+                    UPDATE T_Admin 
+                    SET admin_email = ?, admin_password = ?, admin_name = ?, 
+                        admin_role = ?, admin_active = ?, admin_modify_date = NOW()
+                    WHERE admin_id = ?
+                ");
+                $stmt->bind_param("ssssss", $email, $hashed, $name, $role, $active, $id);
+
             } else {
-                // Don't update password
-                $stmt = $conn->prepare("UPDATE T_Admin SET admin_email = ?, admin_name = ?, admin_role = ?, admin_active = ?, admin_modify_date = NOW() 
-                               WHERE admin_id = ?");
-                if ($stmt) {
-                    $stmt->bind_param('ssssi', $email, $name, $role, $active, $id);
-                }
+
+                $stmt = $conn->prepare("
+                    UPDATE T_Admin 
+                    SET admin_email = ?, admin_name = ?, 
+                        admin_role = ?, admin_active = ?, admin_modify_date = NOW()
+                    WHERE admin_id = ?
+                ");
+                $stmt->bind_param("sssss", $email, $name, $role, $active, $id);
             }
 
-            if ($stmt && $stmt->execute()) {
+            if ($stmt->execute()) {
                 header('Location: index.php?msg=updated');
                 exit();
             } else {
