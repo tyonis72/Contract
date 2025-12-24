@@ -20,8 +20,10 @@ $total_records = $total_result->fetch_assoc()['total'];
 $total_pages = ceil($total_records / $per_page);
 
 // Fetch admin data
-$query = "SELECT admin_id, admin_email, admin_name, admin_role, admin_active, admin_pic, admin_create_date, admin_modify_date 
-          FROM T_Admin $search_query ORDER BY admin_create_date DESC LIMIT $offset, $per_page";
+$query = "SELECT A.admin_id, A.admin_email, A.admin_name, A.admin_role, A.admin_active, A.admin_pic, A.admin_create_date, A.admin_modify_date, R.role_title AS role_title 
+          FROM T_Admin A 
+          LEFT JOIN T_Role R ON A.admin_role = R.role_id 
+          $search_query ORDER BY A.admin_create_date DESC LIMIT $offset, $per_page";
 $result = $conn->query($query);
 $admins = [];
 while ($row = $result->fetch_assoc()) {
@@ -117,7 +119,7 @@ while ($row = $result->fetch_assoc()) {
                                         <td><?php echo htmlspecialchars($admin['admin_email']); ?></td>
                                         <td><?php echo htmlspecialchars($admin['admin_name']); ?></td>
                                         <td>
-                                            <span class="badge bg-info"><?php echo htmlspecialchars($admin['admin_role']); ?></span>
+                                            <span class="badge bg-info"><?php echo htmlspecialchars($admin['role_title'] ?? $admin['admin_role'] ?? '', ENT_QUOTES, 'UTF-8'); ?></span>
                                         </td>
                                         <td>
                                             <?php if (strtolower($admin['admin_active']) === 'active'): ?>
