@@ -75,7 +75,7 @@ $result = $conn->query($sql);
               name="search"
               class="form-control form-control-sm me-2"
               placeholder="Search city / region..."
-              value="<?= htmlspecialchars($keyword); ?>">
+              value="<?= htmlspecialchars($keyword ?? '', ENT_QUOTES, 'UTF-8'); ?>">
             <button class="btn btn-sm btn-outline-secondary me-2" type="submit">
               <i class="fa fa-search"></i>
             </button>
@@ -110,8 +110,8 @@ $result = $conn->query($sql);
                   ?>
                       <tr>
                         <td class="text-center"><?= $no++; ?></td>
-                        <td><?= htmlspecialchars($row['city_title']); ?></td>
-                        <td><?= htmlspecialchars($row['region_title']); ?></td>
+                        <td><?= htmlspecialchars($row['city_title'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?= htmlspecialchars($row['region_title'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                         <td class="text-center">
                           <a href="city-edit.php?id=<?= $row['city_id']; ?>" class="btn btn-sm btn-warning">
                             <i class="fa fa-pen"></i>
