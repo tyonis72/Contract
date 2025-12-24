@@ -4,7 +4,8 @@ session_start();
 require_once '../config/db.php';
 
 $debug = true;
-function debugAlert($msg) {
+function debugAlert($msg)
+{
     echo "<script>console.log('DEBUG: " . addslashes($msg) . "');</script>";
 }
 
@@ -60,6 +61,7 @@ if ($row = $result->fetch_assoc()) {
         $_SESSION['admin_email'] = $row['admin_email'];
         $_SESSION['admin_name'] = $row['admin_name'];
         $_SESSION['admin_role'] = $row['admin_role'];
+        $_SESSION['admin_pic'] = isset($row['admin_pic']) ? $row['admin_pic'] : '';
 
         if ($debug) debugAlert("Login OK");
 
@@ -69,7 +71,6 @@ if ($row = $result->fetch_assoc()) {
         header('Location: login.php?error=invalid_password');
         exit();
     }
-
 } else {
     if ($debug) debugAlert("Email tidak ditemukan");
     header('Location: login.php?error=not_found');

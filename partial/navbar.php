@@ -9,7 +9,18 @@
             <span class="text-muted fs-6"><?php echo htmlspecialchars($page_subtitle); ?></span>
         <?php endif; ?>
     </span>
+    <?php if (!isset($base_url)) $base_url = ''; ?>
     <div class="d-flex align-items-center">
-        <i class="fa fa-user-circle me-2 fs-4"></i> <?php echo htmlspecialchars($_SESSION['admin_name']); ?>
+        <?php
+        $pic = $_SESSION['admin_pic'] ?? '';
+        $picFile = __DIR__ . '/../asset/admin_pic/' . $pic;
+        if (!empty($pic) && file_exists($picFile)) {
+            $imgSrc = $base_url . 'asset/admin_pic/' . $pic;
+            echo '<img src="' . htmlspecialchars($imgSrc) . '" alt="Profil" width="40" height="40" class="rounded-circle me-2" style="object-fit: cover;">';
+        } else {
+            echo '<i class="fa fa-user-circle me-2 fs-4"></i>';
+        }
+        ?>
+        <?php echo htmlspecialchars($_SESSION['admin_name']); ?>
     </div>
 </nav>
