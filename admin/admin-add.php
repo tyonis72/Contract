@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $cek_id->store_result();
             } while ($cek_id->num_rows > 0);
 
-[]            /* HANDLE UPLOAD FOTO PROFIL (support base64 from cropper) */
+            /* HANDLE UPLOAD FOTO PROFIL (support base64 from cropper) */
             $admin_pic = '';
             if (!empty($_POST['admin_pic_data'])) {
                 $data = $_POST['admin_pic_data'];
@@ -81,10 +81,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $maxLen = isset($colRow['CHARACTER_MAXIMUM_LENGTH']) ? (int)$colRow['CHARACTER_MAXIMUM_LENGTH'] : null;
                         }
                         if (is_int($maxLen) && $maxLen > 0 && strlen($filename) > $maxLen) {
-                            $allowedBaseLen = $maxLen - (strlen(ltrim($ext,'.')) + 1);
+                            $allowedBaseLen = $maxLen - (strlen(ltrim($ext, '.')) + 1);
                             if ($allowedBaseLen > 0) {
                                 $baseName = substr($admin_id . '_' . time(), 0, $allowedBaseLen);
-                                $filename = $baseName . '.' . ltrim($ext,'.');
+                                $filename = $baseName . '.' . ltrim($ext, '.');
                             } else {
                                 $hash = substr(sha1($filename), 0, max(1, $maxLen - 1));
                                 $filename = $hash;
@@ -223,70 +223,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                     <div class="mb-3">
                                         <label class="form-label">Foto Profil</label>
-<div class="d-flex align-items-center gap-3">
-    <div>
-        <img id="preview-thumb" src="" alt="Preview" width="60" height="60" class="rounded-circle" style="object-fit: cover; display:none;">
-    </div>
-    <div class="flex-grow-1">
-        <input type="file" id="admin_pic_input" name="admin_pic" accept=".jpg,.jpeg,.png" class="form-control">
-        <input type="hidden" name="admin_pic_data" id="admin_pic_data">
-        <small class="text-muted">Format: JPG/PNG. Maks 2MB. Setelah memilih file Anda bisa crop sebelum menyimpan.</small>
-    </div>
-    <div>
-        <button type="button" class="btn btn-outline-secondary" id="openCropperBtn" style="display:none;">Crop</button>
-    </div>
-</div>
-
-<!-- Crop modal -->
-<div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Crop Foto Profil</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center">
-        <div style="max-height:60vh;">
-          <img id="cropperImage" src="" style="max-width:100%;">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-        <button type="button" class="btn btn-primary" id="cropAndUse">Gunakan Foto</button>
-      </div>
-    </div>
-  </div>
-</div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Role</label>
-                                        <select name="admin_role" class="form-control">
-                                            <option value="">-- Pilih Role --</option>
-                                            <?php foreach ($roles as $r): ?>
-                                                <option value="<?= htmlspecialchars($r['role_id']) ?>">
-                                                    <?= htmlspecialchars($r['role_title']) ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label class="form-label">Status</label>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="admin_active" value="active" checked>
-                                            <label class="form-check-label">Aktif</label>
+                                        <div class="d-flex align-items-center gap-3">
+                                            <div>
+                                                <img id="preview-thumb" src="" alt="Preview" width="60" height="60" class="rounded-circle" style="object-fit: cover; display:none;">
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <input type="file" id="admin_pic_input" name="admin_pic" accept=".jpg,.jpeg,.png" class="form-control">
+                                                <input type="hidden" name="admin_pic_data" id="admin_pic_data">
+                                                <small class="text-muted">Format: JPG/PNG. Maks 2MB. Setelah memilih file Anda bisa crop sebelum menyimpan.</small>
+                                            </div>
+                                            <div>
+                                                <button type="button" class="btn btn-outline-secondary" id="openCropperBtn" style="display:none;">Crop</button>
+                                            </div>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="admin_active" value="inactive">
-                                            <label class="form-check-label">Tidak Aktif</label>
-                                        </div>
-                                    </div>
 
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fa fa-save me-2"></i>Simpan
-                                    </button>
-                                    <a href="index.php" class="btn btn-secondary">
-                                        <i class="fa fa-arrow-left me-2"></i>Kembali
-                                    </a>
+                                        <!-- Crop modal -->
+                                        <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Crop Foto Profil</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body text-center">
+                                                        <div style="max-height:60vh;">
+                                                            <img id="cropperImage" src="" style="max-width:100%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                        <button type="button" class="btn btn-primary" id="cropAndUse">Gunakan Foto</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Role</label>
+                                            <select name="admin_role" class="form-control">
+                                                <option value="">-- Pilih Role --</option>
+                                                <?php foreach ($roles as $r): ?>
+                                                    <option value="<?= htmlspecialchars($r['role_id']) ?>">
+                                                        <?= htmlspecialchars($r['role_title']) ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Status</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="admin_active" value="active" checked>
+                                                <label class="form-check-label">Aktif</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="admin_active" value="inactive">
+                                                <label class="form-check-label">Tidak Aktif</label>
+                                            </div>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fa fa-save me-2"></i>Simpan
+                                        </button>
+                                        <a href="index.php" class="btn btn-secondary">
+                                            <i class="fa fa-arrow-left me-2"></i>Kembali
+                                        </a>
 
                                 </form>
                             </div>
@@ -300,57 +300,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <script src="../asset/js/script.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.js"></script>
         <script>
-        (function(){
-          let cropper, modalEl, bsModal;
-          document.addEventListener('DOMContentLoaded', function(){
-            const input = document.getElementById('admin_pic_input');
-            const preview = document.getElementById('preview-thumb');
-            const openBtn = document.getElementById('openCropperBtn');
-            const img = document.getElementById('cropperImage');
-            const hidden = document.getElementById('admin_pic_data');
-            modalEl = document.getElementById('cropperModal');
-            bsModal = new bootstrap.Modal(modalEl, {});
+            (function() {
+                let cropper, modalEl, bsModal;
+                document.addEventListener('DOMContentLoaded', function() {
+                    const input = document.getElementById('admin_pic_input');
+                    const preview = document.getElementById('preview-thumb');
+                    const openBtn = document.getElementById('openCropperBtn');
+                    const img = document.getElementById('cropperImage');
+                    const hidden = document.getElementById('admin_pic_data');
+                    modalEl = document.getElementById('cropperModal');
+                    bsModal = new bootstrap.Modal(modalEl, {});
 
-            input.addEventListener('change', function(e){
-              const file = e.target.files && e.target.files[0];
-              if (!file) return;
-              if (!/image\/(jpeg|png)/.test(file.type)) { alert('Format file harus JPG/PNG.'); input.value = ''; return; }
-              if (file.size > 2 * 1024 * 1024) { alert('Ukuran maksimal 2MB.'); input.value = ''; return; }
-              const reader = new FileReader();
-              reader.onload = function(ev){
-                img.src = ev.target.result;
-                preview.src = ev.target.result;
-                preview.style.display = 'inline-block';
-                openBtn.style.display = 'inline-block';
-              };
-              reader.readAsDataURL(file);
-            });
+                    input.addEventListener('change', function(e) {
+                        const file = e.target.files && e.target.files[0];
+                        if (!file) return;
+                        if (!/image\/(jpeg|png)/.test(file.type)) {
+                            alert('Format file harus JPG/PNG.');
+                            input.value = '';
+                            return;
+                        }
+                        if (file.size > 2 * 1024 * 1024) {
+                            alert('Ukuran maksimal 2MB.');
+                            input.value = '';
+                            return;
+                        }
+                        const reader = new FileReader();
+                        reader.onload = function(ev) {
+                            img.src = ev.target.result;
+                            preview.src = ev.target.result;
+                            preview.style.display = 'inline-block';
+                            openBtn.style.display = 'inline-block';
+                        };
+                        reader.readAsDataURL(file);
+                    });
 
-            openBtn.addEventListener('click', function(){
-              bsModal.show();
-              // init cropper after modal shown
-              modalEl.addEventListener('shown.bs.modal', function handler(){
-                cropper = new Cropper(img, { aspectRatio: 1, viewMode: 1, background: false, movable:false, zoomable:true });
-                modalEl.removeEventListener('shown.bs.modal', handler);
-              });
-              modalEl.addEventListener('hidden.bs.modal', function(){ if (cropper) { cropper.destroy(); cropper = null; } });
-            });
+                    openBtn.addEventListener('click', function() {
+                        bsModal.show();
+                        // init cropper after modal shown
+                        modalEl.addEventListener('shown.bs.modal', function handler() {
+                            cropper = new Cropper(img, {
+                                aspectRatio: 1,
+                                viewMode: 1,
+                                background: false,
+                                movable: false,
+                                zoomable: true
+                            });
+                            modalEl.removeEventListener('shown.bs.modal', handler);
+                        });
+                        modalEl.addEventListener('hidden.bs.modal', function() {
+                            if (cropper) {
+                                cropper.destroy();
+                                cropper = null;
+                            }
+                        });
+                    });
 
-            document.getElementById('cropAndUse').addEventListener('click', function(){
-              if (!cropper) return;
-              cropper.getCroppedCanvas({width:400, height:400, imageSmoothingQuality: 'high'}).toBlob(function(blob){
-                const reader = new FileReader();
-                reader.onloadend = function(){
-                  hidden.value = reader.result; // data URL
-                  preview.src = reader.result;
-                  bsModal.hide();
-                };
-                reader.readAsDataURL(blob);
-              }, 'image/jpeg', 0.9);
-            });
+                    document.getElementById('cropAndUse').addEventListener('click', function() {
+                        if (!cropper) return;
+                        cropper.getCroppedCanvas({
+                            width: 400,
+                            height: 400,
+                            imageSmoothingQuality: 'high'
+                        }).toBlob(function(blob) {
+                            const reader = new FileReader();
+                            reader.onloadend = function() {
+                                hidden.value = reader.result; // data URL
+                                preview.src = reader.result;
+                                bsModal.hide();
+                            };
+                            reader.readAsDataURL(blob);
+                        }, 'image/jpeg', 0.9);
+                    });
 
-          });
-        })();
+                });
+            })();
         </script>
 </body>
 
